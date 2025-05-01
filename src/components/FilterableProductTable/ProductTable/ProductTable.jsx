@@ -1,12 +1,18 @@
 import ProductCategoryRow from "./ProductCategoryRow.jsx";
 import ProductRow from "./ProductRow.jsx";
 
-export default function ProductTable({ products }) {
+export default function ProductTable({ products, filterText, inStockOnly }) {
   const rows = [];
   let lastCategory = null;
 
   // biome-ignore lint/complexity/noForEach: <explanation>
   products.forEach((product) => {
+    if (product.name.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
+      return;
+    }
+    if (inStockOnly && !product.stocked) {
+      return;
+    }
     if (product.category !== lastCategory) {
       rows.push(
         <ProductCategoryRow
